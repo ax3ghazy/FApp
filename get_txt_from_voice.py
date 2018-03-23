@@ -1,4 +1,5 @@
 import boto3
+
 def get_txt (fil, buckt, jopname):
 	
 	client = boto3.client('s3')
@@ -8,6 +9,7 @@ def get_txt (fil, buckt, jopname):
 	response = client.get_transcription_job(
     TranscriptionJobName=jopname
 )
+	print (response['TranscriptionJob']['TranscriptionJobName'])
 	if response['TranscriptionJob']['TranscriptionJobStatus'] == "FAILED":
 		print ('-1')
 		return -1
@@ -17,7 +19,4 @@ def get_txt (fil, buckt, jopname):
 	if response['TranscriptionJob']['TranscriptionJobStatus'] == "IN-PROGRESS":
 		print ('0')
 		return 0
-
-
-get_txt('trt', 'abdelshahied','mmm11')
-
+	else: print ('error')
