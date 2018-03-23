@@ -1,0 +1,146 @@
+import boto3
+
+Input = input("image searching for ")
+
+client = boto3.client('s3')
+
+
+client.upload_file(Input, 'abdelshahied', Input)
+
+# detecting all the faces
+rekog = boto3.client('rekognition')
+responsex = rekog.detect_faces(
+    Image={
+        'S3Object': {
+            'Bucket': 'abdelshahied',
+            'Name': Input
+            }
+
+        },
+    Attributes=[
+        'ALL',
+        ]
+    )
+
+#include other emotions later on 
+#another loop
+#face description
+
+for match in responsex['FaceDetails']:
+        print('The Person infront of you is ')        
+        print(match['Emotions'][0]['Type'], '\n')
+            
+
+
+#searching for faces
+
+response = rekog.index_faces(
+    CollectionId='omg',
+    Image={
+        'S3Object': {
+            'Bucket': 'abdelshahied',
+            'Name': Input
+        }
+    },
+    DetectionAttributes=[
+        'ALL',
+    ]
+)
+
+
+flag = 1;
+for i in response['FaceRecords']:
+    phid = i['Face']['FaceId']        
+    
+    responses = rekog.search_faces(
+        CollectionId='omg',
+        FaceId=phid,
+    )
+
+    print(responses, '\n')
+
+    for match in responses['FaceMatches']:
+        if(match['Similarity'] > 90):
+            flag = 0; 
+        if ('ExternalImageId' in match['Face']):           
+            print(match['Face']['ExternalImageId'], '\n')
+        else:
+            print("There's a stranger \n")
+
+
+#response = rekog.search_faces_by_image(
+#    CollectionId='rrr',
+#    Image={
+#        'S3Object': {
+#            'Bucket': 'ai5s-bucket',
+#            'Name': Input
+#        }
+#    },
+#    MaxFaces=100,
+#)
+
+
+
+
+#print(response, '\n')
+
+
+        
+
+if(flag):
+    for match in responsex['FaceDetails']:
+            print('You are seeing a ', match['Gender']['Value'])
+            print('The age ranges between ', match['AgeRange']['Low'], ' and ', match['AgeRange']['High'])
+            if (match['Gender']['Value'] == 'Male'):
+                if (match['Beard']['Value']):
+                    print ("with beard")
+                if (match['Mustache']['Value']):
+                    print ("with Mustache")
+
+
+
+    doyou = input("Do you want to add this person? ")
+    type(doyou)
+
+    if(doyou == 'yes'):
+        image = input("Say the person's name ")
+        type(image)
+  
+        print (image , '\n')    
+        
+        # a solo pic
+        response1 = rekog.index_faces(
+        CollectionId='omg',    
+        Image={
+            'S3Object': {
+                'Bucket': 'abdelshahied',
+                'Name': Input
+            }
+        },
+        ExternalImageId= image,
+        DetectionAttributes=[
+            'ALL',
+        ]
+    )
+        print(response1, '\n')
+    else:
+        response2 = client.delete_object(
+            Bucket= 'abdelshahied',
+            Key= Input
+        )
+else:
+    response2 = client.delete_object(
+        Bucket= 'abdelshahied',
+        Key= Input
+    )
+
+    
+print(responsex, '\n')
+
+
+
+
+
+
+
+
