@@ -11,17 +11,13 @@ com_file = open(path, 'r')
 
 comp = boto3.client('comprehend')
 
-response = comp.batch_detect_dominant_language(
-    TextList=[
-        com_file.readline(),
-    ]
+response = comp.detect_dominant_language(
+    Text = com_file.readline(),
 )
-
-print (response)
-
-for match in response['ResultList']:
-	for language in match['Languages']:
-		if (language['Score'] > 0.9):
-			code = language ['LanguageCode']
-
+x = 0.0
+for language in response['Languages']:
+	if language ['Score'] > x:
+		code = language ['LanguageCode']
+		x = language ['Score']
+	
 print (code)	
