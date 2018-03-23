@@ -1,0 +1,30 @@
+import boto3
+
+
+Input = input("adding ")
+ID = input ("with an ID of ")
+client = boto3.client('s3')
+
+rekog = boto3.client('rekognition')
+
+client.upload_file(Input, 'abdelshahied', Input)
+
+
+#response = rekog.create_collection(
+#    CollectionId='omg'
+#)
+
+response1 = rekog.index_faces(
+    CollectionId='omg',
+    Image={
+        'S3Object': {
+            'Bucket': 'abdelshahied',
+            'Name': Input
+        }
+    },
+    ExternalImageId=ID,
+    DetectionAttributes=[
+        'ALL',
+    ]
+)
+print(response1, '\n')
