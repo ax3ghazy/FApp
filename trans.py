@@ -1,6 +1,6 @@
 import boto3
 
-def voice2txt(fil, buckt, jopname):
+def voice2txt(fil, buckt, jopname, formatt):
 
 	client = boto3.client('s3')
 	client.upload_file(fil, buckt, fil)
@@ -9,7 +9,7 @@ def voice2txt(fil, buckt, jopname):
 	response = client.start_transcription_job(
 	    TranscriptionJobName=jopname,
 	    LanguageCode='en-US',
-	    MediaFormat='mp3',
+	    MediaFormat=formatt,
 	    Media={
 		'MediaFileUri': path
 	    }
