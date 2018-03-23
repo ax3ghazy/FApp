@@ -1,37 +1,42 @@
 import boto3
 
-client = boto3.client('s3')
+def translate (source, target, buck, fil_in, fil_out_en, path, path1):
 
-response = client.create_bucket(Bucket='abdelshahied')
-client.upload_file('test.txt', 'abdelshahied', 'test.txt')
-client.upload_file('en_trans.txt', 'abdelshahied', 'en_trans.txt')
+	client = boto3.client('s3')
 
-translt = boto3.client('translate')
+	response = client.create_bucket(Bucket=buck)
+	client.upload_file(fil_in, buck, fil_in)
+	client.upload_file(fil_out_en, buck, fil_out_en)
 
-source = 'es'
-target = 'ar'
+	translt = boto3.client('translate')
 
-path = "/home/ubuntu/Desktop/test.txt"
-path1 = "/home/ubuntu/Desktop/en_trans.txt"
+	#source = 'es'
+	#target = 'ar'
 
-tran_file = open(path, 'r')
-out_file = open(path1, 'w')
+	#path = "/home/ubuntu/Desktop/test.txt"
+	#path1 = "/home/ubuntu/Desktop/en_trans.txt"
 
-response = translt.translate_text(
-    Text= tran_file.read(),
-    SourceLanguageCode=source,
-    TargetLanguageCode= 'en'
-)
+	tran_file = open(path, 'r')
+	out_file = open(path1, 'w')
 
-temp = response['TranslatedText']
-out_file.write(temp)
+	response = translt.translate_text(
+	    Text= tran_file.read(),
+	    SourceLanguageCode=source,
+	    TargetLanguageCode= 'en'
+	)
 
-response = translt.translate_text(
-    Text= temp,
-    SourceLanguageCode='en',
-    TargetLanguageCode= target
-)
+	temp = response['TranslatedText']
+	out_file.write(temp)
 
-temp1 = response['TranslatedText']
+	response = translt.translate_text(
+	    Text= temp,
+	    SourceLanguageCode='en',
+	    TargetLanguageCode= target
+	)
 
-print (temp1)
+	temp1 = response['TranslatedText']
+
+	print (temp1)
+	return temp1
+
+#translate ('es', 'de', 'abdelshahied', 'test.txt', 'en_trans.txt', "/home/ubuntu/Desktop/test.txt", "/home/ubuntu/Desktop/en_trans.txt")
