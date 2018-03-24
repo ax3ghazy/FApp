@@ -123,7 +123,7 @@ def lambda_handler(event, context):
    # client.upload_file('dody1.jpg', 'ai5', 'dody1.jpg')
    # rekog = boto3.client('rekognition')
 
-    Input = 'lol.jpg'
+    Input = 'Amor.jpg'
     client = boto3.client('s3')
     #client.upload_file(Input, 'abdelshahied', Input)
     rekog = boto3.client('rekognition')
