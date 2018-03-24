@@ -1,0 +1,29 @@
+import boto3
+
+
+def TxtToSp (format,txt,vid,outname):
+    client = boto3.client('polly')
+    response = client.synthesize_speech(
+        OutputFormat=format,
+        Text=txt,
+        VoiceId=vid
+    )
+    print('\n')
+    out = response['AudioStream']
+    out = out.read()
+    print(out)
+    outf = open(outname, "wb")
+    outf.write(out)
+    outf.close()
+    return
+
+def lambda_handler(event, context):
+    # TODO implement
+  #  client = boto3.client('s3')
+   # client.upload_file('dody1.jpg', 'ai5', 'dody1.jpg')
+   # rekog = boto3.client('rekognition')
+#    return ImgtoTxt('text1.jpg', 'mayada')
+    return TxtToSp ('mp3','I love you','Emma','ily.mp3')
+
+#    Input = input("image searching for ")
+    #return 'Hello from Lambda'
