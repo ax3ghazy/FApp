@@ -1,6 +1,8 @@
 import requests
+import json
+from pprint import pprint
 
 def get_get (uri):
 	r = requests.get(url=uri)
-	print(r.json())
-	return x
+	pprint(r.json())
+	return r
