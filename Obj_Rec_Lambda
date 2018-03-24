@@ -1,0 +1,26 @@
+import boto3
+
+
+
+def detLabels(image, bkt, rekog):
+    response = rekog.detect_labels(
+        Image={
+            'S3Object': {
+                'Bucket': 'ai5',
+                'Name': image
+            }
+        },
+        MaxLabels=123,
+    )
+    out = []
+    for label in response['Labels']:
+        out.append(label['Name']) 
+    print (out)
+    return out      
+
+def lambda_handler(event, context):
+    # TODO implement
+    client = boto3.client('s3')
+   # client.upload_file('dody1.jpg', 'ai5', 'dody1.jpg')
+    rekog = boto3.client('rekognition')
+    return detLabels('dody1.jpg', 'ai5', rekog)
