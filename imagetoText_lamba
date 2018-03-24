@@ -1,0 +1,30 @@
+import boto3
+
+
+def ImgtoTxt (img,bkt):
+    client = boto3.client('s3')
+    #client.upload_file(img,bkt,img)
+    client = boto3.client('rekognition')
+    response = client.detect_text(
+        Image={
+            'S3Object': {
+                'Bucket': bkt,
+                'Name': img,
+            }
+        }
+    )
+    out = []
+    for i in response['TextDetections']:
+        out.append(i['DetectedText'])
+    print(out)
+    return out
+
+def lambda_handler(event, context):
+    # TODO implement
+  #  client = boto3.client('s3')
+   # client.upload_file('dody1.jpg', 'ai5', 'dody1.jpg')
+   # rekog = boto3.client('rekognition')
+    return ImgtoTxt('text1.jpg', 'mayada')
+
+#    Input = input("image searching for ")
+    #return 'Hello from Lambda'
